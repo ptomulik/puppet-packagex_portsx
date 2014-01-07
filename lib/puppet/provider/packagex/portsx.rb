@@ -26,9 +26,6 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   other packages depending on this one. For `pkg_deinstall` the `%w{-r}` does
   the job and for `pkgng` it's achieved with `%w{-y -R}`.
 
-  `build_options` is an alias for `package_settings`, its going to be
-  deprecated and removed.
-
   `package_settings` shall be a hash with port's option names as keys (all
   uppercase) and boolean values. This parameter defines options that you would
   normally set with make config command (the blue ncurses interface). Here is
