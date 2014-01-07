@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/ptomulik/puppet-packagex_portsx.png?branch=master)](https://travis-ci.org/ptomulik/puppet-packagex_portsx)
 [![Coverage Status](https://coveralls.io/repos/ptomulik/puppet-packagex_portsx/badge.png?branch=master)](https://coveralls.io/r/ptomulik/puppet-packagex_portsx?branch=master)
-[![Code Climate](https://codeclimate.com/github/ptomulik/puppet-packagex_portsx.png)](https://codeclimate.com/github/ptomulik/puppet-packagex_portsx)
 
 #### Table of Contents
 

@@ -1,4 +1,5 @@
 2014-01-06 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * removed codeclimage badge from README.md
   * release 0.1.1
   * fixed names in .scripts/build-module.sh
   * fixed dependencies in Modulefile
