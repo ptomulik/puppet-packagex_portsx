@@ -26,21 +26,25 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   other packages depending on this one. For `pkg_deinstall` the `%w{-r}` does
   the job and for `pkgng` it's achieved with `%w{-y -R}`.
 
-  `build_options` shall be a hash with port's option names as keys (all
+  `build_options` is an alias for `package_settings`, its going to be
+  deprecated and removed.
+
+  `package_settings` shall be a hash with port's option names as keys (all
   uppercase) and boolean values. This parameter defines options that you would
   normally set with make config command (the blue ncurses interface). Here is
   an example:
 
       packagex { 'www/apache22':
         ensure => present,
-        build_options => { 'SUEXEC' => true }
+        package_settings => { 'SUEXEC' => true }
       }
+
 
   The options are written to `/var/db/ports/*/options.local` files (one file
   per package). For old `pkg_xxx` toolstack they are synchronized with what is
   found in `/var/db/ports/*/options{,.local}` files (possibly several files
   files per package). For the new `pkgng` system, they're synchronized with
-  options returned by `pkg query`. If `build_options` of an already installed
+  options returned by `pkg query`. If `package_settings` of an already installed
   package are out of sync with the ones prescribed in puppet manifests, the
   package gets reinstalled with the options taken from puppet manifests.
   "
@@ -124,7 +128,7 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
       package = new({
         :name => record[:portorigin] || record[:pkgname],
         :ensure => record[:pkgversion],
-        :build_options => options[record[:portorigin]] || record[:options] || {},
+        :package_settings => options[record[:portorigin]] || record[:options] || {},
         :provider => self.name
       })
       package.assign_port_attributes(record)
@@ -197,30 +201,30 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
       instance_variable_set("@#{key}".intern, record[key])
     end
   end
-
+  
   # needed by Puppet::Type::Packagex
-  def build_options_validate(opts)
+  def package_settings_validate(opts)
     return true if not opts # options not defined
     options_class = Puppet::Util::PTomulik::Packagex::Portsx::Options
     unless opts.is_a?(Hash) or opts.is_a?(options_class)
       fail ArgumentError, "#{opts.inspect} of type #{opts.class} is not an " +
-                          "options Hash (for $build_options)"
+                          "options Hash (for $package_settings)"
     end
     opts.each do |k, v|
       unless options_class.option_name?(k)
         fail ArgumentError, "#{k.inspect} is not a valid option name (for " +
-                            "$build_options)"
+                            "$package_settings)"
       end
       unless options_class.option_value?(v)
         fail ArgumentError, "#{v.inspect} is not a valid option value (for " +
-                            "$build_options)"
+                            "$package_settings)"
       end
     end
     true
   end
 
   # needed by Puppet::Type::Packagex
-  def build_options_munge(opts)
+  def package_settings_munge(opts)
     unless opts.is_a?(Puppet::Util::PTomulik::Packagex::Portsx::Options)
       Puppet::Util::PTomulik::Packagex::Portsx::Options[opts || {}]
     else
@@ -229,7 +233,7 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   end
 
   # needed by Puppet::Type::Packagex
-  def build_options_insync?(should, is)
+  def package_settings_insync?(should, is)
     unless should.is_a?(Puppet::Util::PTomulik::Packagex::Portsx::Options) and
                is.is_a?(Puppet::Util::PTomulik::Packagex::Portsx::Options)
       return false
@@ -238,7 +242,7 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   end
 
   # needed by Puppet::Type::Packagex
-  def build_options_should_to_s(should, newvalue)
+  def package_settings_should_to_s(should, newvalue)
     if newvalue.is_a?(Puppet::Util::PTomulik::Packagex::Portsx::Options)
       Puppet::Util::PTomulik::Packagex::Portsx::Options[newvalue.sort].inspect
     else
@@ -247,7 +251,7 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   end
 
   # needed by Puppet::Type::Packagex
-  def build_options_is_to_s(should, currentvalue)
+  def package_settings_is_to_s(should, currentvalue)
     if currentvalue.is_a?(Puppet::Util::PTomulik::Packagex::Portsx::Options)
       hash = currentvalue.select{|k,v| should.keys.include? k}.sort
       Puppet::Util::PTomulik::Packagex::Portsx::Options[hash].inspect
@@ -257,32 +261,41 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   end
 
   # Interface method required by package resource type. Returns the current
-  # value of build_options property.
-  def build_options
-    properties[:build_options]
+  # value of package_settings property.
+  def package_settings
+    properties[:package_settings]
   end
 
   # Reinstall package to deploy (new) build options.
-  def build_options=(opts)
+  def package_settings=(opts)
     reinstall(opts)
   end
+# PACKAGEX_EXTRA_START
+  alias_method :build_options_validate,    :package_settings_validate
+  alias_method :build_options_munge,       :package_settings_munge
+  alias_method :build_options_insync?,     :package_settings_insync?
+  alias_method :build_options_should_to_s, :package_settings_should_to_s
+  alias_method :build_options_is_to_s,     :package_settings_is_to_s
+  alias_method :build_options,             :package_settings
+  alias_method :build_options=,            :package_settings=
+# PACKAGEX_EXTRA_END
 
-  def sync_build_options(should)
+  def sync_package_settings(should)
     return if not should
-    is = properties[:build_options]
-    unless build_options_insync?(should, is)
+    is = properties[:package_settings]
+    unless package_settings_insync?(should, is)
       should.save(options_file, { :pkgname => pkgname })
     end
   end
-  private :sync_build_options
+  private :sync_package_settings
 
-  def revert_build_options
-    if options = properties[:build_options]
+  def revert_package_settings
+    if options = properties[:package_settings]
       debug "Reverting options in #{options_file}"
-      properties[:build_options].save(options_file, { :pkgname => pkgname })
+      properties[:package_settings].save(options_file, { :pkgname => pkgname })
     end
   end
-  private :revert_build_options
+  private :revert_package_settings
 
   # Return portupgrade's CLI options for use within the {#install} method.
   def install_options
@@ -369,16 +382,16 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   end
 
   # For internal use only
-  def do_portupgrade(name, args, build_options)
+  def do_portupgrade(name, args, package_settings)
     cmd = args << name
     begin
-      sync_build_options(build_options)
+      sync_package_settings(package_settings)
       output = portupgrade(*cmd)
       if output =~ /\*\* No such /
         raise Puppet::ExecutionFailure, "Could not find package #{name}"
       end
     rescue
-      revert_build_options
+      revert_package_settings
       raise
     end
   end
@@ -388,7 +401,7 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
   def install
     # we prefetched also not installed ports so @portorigin may be present
     name = @portorigin || resource[:name]
-    do_portupgrade name, install_options, resource[:build_options]
+    do_portupgrade name, install_options, resource[:package_settings]
   end
 
   # reinstall already installed package with new options.
@@ -406,7 +419,7 @@ Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :f
       install
     else
       if @portorigin
-        do_portupgrade portorigin, upgrade_options, resource[:build_options]
+        do_portupgrade portorigin, upgrade_options, resource[:package_settings]
       else
         warning "Could not upgrade package '#{name}' which has no port origin."
       end

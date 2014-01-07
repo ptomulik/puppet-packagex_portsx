@@ -49,39 +49,39 @@ describe provider_class do
     @provider.should respond_to(:uninstall)
   end
 
-  it "should have a build_options_validate method" do
+  it "should have a package_settings_validate method" do
     @provider = provider_class.new
-    @provider.should respond_to(:build_options_validate)
+    @provider.should respond_to(:package_settings_validate)
   end
 
-  it "should have a build_options_munge method" do
+  it "should have a package_settings_munge method" do
     @provider = provider_class.new
-    @provider.should respond_to(:build_options_munge)
+    @provider.should respond_to(:package_settings_munge)
   end
 
-  it "should have a build_options_insync? method" do
+  it "should have a package_settings_insync? method" do
     @provider = provider_class.new
-    @provider.should respond_to(:build_options_insync?)
+    @provider.should respond_to(:package_settings_insync?)
   end
 
-  it "should have a build_options_should_to_s method" do
+  it "should have a package_settings_should_to_s method" do
     @provider = provider_class.new
-    @provider.should respond_to(:build_options_should_to_s)
+    @provider.should respond_to(:package_settings_should_to_s)
   end
 
-  it "should have a build_options_is_to_s method" do
+  it "should have a package_settings_is_to_s method" do
     @provider = provider_class.new
-    @provider.should respond_to(:build_options_is_to_s)
+    @provider.should respond_to(:package_settings_is_to_s)
   end
 
-  it "should have a build_options method" do
+  it "should have a package_settings method" do
     @provider = provider_class.new
-    @provider.should respond_to(:build_options)
+    @provider.should respond_to(:package_settings)
   end
 
-  it "should have a build_options= method" do
+  it "should have a package_settings= method" do
     @provider = provider_class.new
-    @provider.should respond_to(:build_options=)
+    @provider.should respond_to(:package_settings=)
   end
 
   it "should have an install_options method" do
@@ -152,7 +152,7 @@ describe provider_class do
             {
               :name => 'www/apache22',
               :ensure => '2.2.26',
-              :build_options => options_class[ { :SUEXEC => true } ],
+              :package_settings => options_class[ { :SUEXEC => true } ],
               :provider => :portsx
             },
             {
@@ -174,7 +174,7 @@ describe provider_class do
             {
               :name => 'lang/ruby19',
               :ensure => '1.9.3.484,1',
-              :build_options => options_class[ {} ],
+              :package_settings => options_class[ {} ],
               :provider => :portsx
             },
             {
@@ -528,43 +528,43 @@ describe provider_class do
     end
   end
 
-  describe "#build_options_validate(opts)" do
+  describe "#package_settings_validate(opts)" do
     [
-      [ 123, ArgumentError, "123 of type Fixnum is not an options Hash (for $build_options)"],
+      [ 123, ArgumentError, "123 of type Fixnum is not an options Hash (for $package_settings)"],
       [ { :FOO => true }, nil, nil ],
-      [ { 76 => false }, ArgumentError, "76 is not a valid option name (for $build_options)" ],
-      [ { :FOO => 123}, ArgumentError, "123 is not a valid option value (for $build_options)" ],
+      [ { 76 => false }, ArgumentError, "76 is not a valid option name (for $package_settings)" ],
+      [ { :FOO => 123}, ArgumentError, "123 is not a valid option value (for $package_settings)" ],
     ].each do |opts,err,msg|
-      context "#build_options_validate(#{opts.inspect})" do
+      context "#package_settings_validate(#{opts.inspect})" do
         let(:opts) { opts }
         let(:err) { err }
         let(:msg) { msg }
         it do
           if err
-            expect { subject.build_options_validate(opts) }.to raise_error err, msg
+            expect { subject.package_settings_validate(opts) }.to raise_error err, msg
           else
-            expect { subject.build_options_validate(opts) }.to_not raise_error
+            expect { subject.package_settings_validate(opts) }.to_not raise_error
           end
         end
       end
     end
   end
 
-  describe "#build_options_munge(opts)" do
+  describe "#package_settings_munge(opts)" do
     [
       { :FOO => true },
       options_class[{ :FOO => true }],
     ].each do |opts|
-      context "#build_options_munge(#{opts.inspect})" do
+      context "#package_settings_munge(#{opts.inspect})" do
         let(:opts) { opts }
         it do
-          subject.build_options_munge(opts).should == options_class[opts]
+          subject.package_settings_munge(opts).should == options_class[opts]
         end
       end
     end
   end
 
-  describe "#build_options_insync?(should,is)" do
+  describe "#package_settings_insync?(should,is)" do
     [
       [
         options_class[{:FOO => true}],
@@ -605,13 +605,13 @@ describe provider_class do
       let(:should) { should }
       let(:is) { is }
       let(:result) { result }
-      context "#build_options_insync?(#{should.inspect}, #{is.inspect})" do
-        it { subject.build_options_insync?(should,is).should == result}
+      context "#package_settings_insync?(#{should.inspect}, #{is.inspect})" do
+        it { subject.package_settings_insync?(should,is).should == result}
       end
     end
   end
 
-  describe "#build_options_should_to_s(should, newvalue)" do
+  describe "#package_settings_should_to_s(should, newvalue)" do
     [
       [{},options_class[{:FOO => true}]],
       [{},{:FOO => true}]
@@ -619,13 +619,13 @@ describe provider_class do
       let(:should) { should }
       let(:newvalue) { newvalue }
       let(:result) { newvalue.is_a?(options_class) ? options_class[newvalue.sort].inspect : newvalue.inspect }
-      context "#build_options_should_to_s(#{should.inspect}, #{newvalue.inspect})" do
-        it { subject.build_options_should_to_s(should,newvalue).should == result}
+      context "#package_settings_should_to_s(#{should.inspect}, #{newvalue.inspect})" do
+        it { subject.package_settings_should_to_s(should,newvalue).should == result}
       end
     end
   end
 
-  describe "#build_options_is_to_s(should, currvalue)" do
+  describe "#package_settings_is_to_s(should, currvalue)" do
     [
       [{},{},"{}"],
       [options_class[{}],options_class[{:FOO => true}], "{}"],
@@ -636,23 +636,23 @@ describe provider_class do
       let(:should) { should }
       let(:currvalue) { currvalue }
       let(:result) { result }
-      context "#build_options_is_to_s(#{should.inspect}, #{currvalue.inspect})" do
-        it { subject.build_options_is_to_s(should,currvalue).should == result}
+      context "#package_settings_is_to_s(#{should.inspect}, #{currvalue.inspect})" do
+        it { subject.package_settings_is_to_s(should,currvalue).should == result}
       end
     end
   end
 
-  describe "#build_options" do
+  describe "#package_settings" do
     it do
-      subject.stubs(:properties).once.returns({:build_options => options_class[{}]})
-      subject.build_options.should == options_class[{}]
+      subject.stubs(:properties).once.returns({:package_settings => options_class[{}]})
+      subject.package_settings.should == options_class[{}]
     end
   end
 
-  describe "#build_options=(opts)" do
+  describe "#package_settings=(opts)" do
     it do
       subject.stubs(:reinstall).once.with(options_class[{:FOO => true}])
-      expect { subject.build_options=options_class[{:FOO => true}] }.to_not raise_error
+      expect { subject.package_settings=options_class[{:FOO => true}] }.to_not raise_error
     end
   end
 
@@ -699,8 +699,8 @@ describe provider_class do
       before :each do
         ops =  options_class[{:FOO => true}]
         ops.stubs(:save).once.with('/var/db/ports/bar_foo/options.local', {:pkgname => 'foo-1.2.3'})
-        subject.stubs(:properties).returns({:build_options => options_class[{:FOO => false}]})
-        subject.stubs(:resource).returns({:name => 'bar/foo', :build_options => ops})
+        subject.stubs(:properties).returns({:package_settings => options_class[{:FOO => false}]})
+        subject.stubs(:resource).returns({:name => 'bar/foo', :package_settings => ops})
         subject.stubs(:options_file).returns('/var/db/ports/bar_foo/options.local')
         subject.stubs(:pkgname).returns('foo-1.2.3')
         subject.stubs(:portupgrade).once.with(*%w{-N -M BATCH=yes bar/foo})
@@ -718,8 +718,8 @@ describe provider_class do
         opts1.stubs(:save).once.with('/var/db/ports/bar_foo/options.local', {:pkgname => 'foo-2.4.5'})
         opts2.stubs(:save).once.with('/var/db/ports/bar_foo/options.local', {:pkgname => 'foo-2.4.5'})
         subject.stubs(:pkgname).returns('foo-2.4.5')
-        subject.stubs(:properties).returns({:build_options => opts1})
-        subject.stubs(:resource).returns({:build_options => opts2})
+        subject.stubs(:properties).returns({:package_settings => opts1})
+        subject.stubs(:resource).returns({:package_settings => opts2})
         subject.stubs(:options_file).returns('/var/db/ports/bar_foo/options.local')
         subject.stubs(:portupgrade).raises RuntimeError, "go and revert options!"
         expect { subject.install }.to raise_error RuntimeError, "go and revert options!"
@@ -732,8 +732,8 @@ describe provider_class do
         opts1.stubs(:save).once.with('/var/db/ports/bar_foo/options.local', {:pkgname => 'foo-2.4.5'})
         opts2.stubs(:save).once.with('/var/db/ports/bar_foo/options.local', {:pkgname => 'foo-2.4.5'})
         subject.stubs(:pkgname).returns('foo-2.4.5')
-        subject.stubs(:properties).returns({:build_options => opts1})
-        subject.stubs(:resource).returns({:name=>'bar/foo', :build_options => opts2})
+        subject.stubs(:properties).returns({:package_settings => opts1})
+        subject.stubs(:resource).returns({:name=>'bar/foo', :package_settings => opts2})
         subject.stubs(:options_file).returns('/var/db/ports/bar_foo/options.local')
         subject.stubs(:portupgrade).returns("** No such package: bar/foo")
         expect { subject.install }.to raise_error Puppet::ExecutionFailure, "Could not find package bar/foo"
@@ -746,7 +746,7 @@ describe provider_class do
       before(:each) do
         subject.instance_variable_set(:@portorigin, 'port/origin')
         subject.stubs(:reinstall_options).returns %w{-r -o}
-        subject.stubs(:resource).returns({:build_options=>{}})
+        subject.stubs(:resource).returns({:package_settings=>{}})
         subject.stubs(:name).returns('bar/foo')
       end
       it "should call do_potupgrade(portorigin, reinstall_options, options)" do
@@ -757,7 +757,7 @@ describe provider_class do
     context "a package that has no port origin" do
       before(:each) do
         subject.stubs(:reinstall_options).returns %w{-r -o}
-        subject.stubs(:resource).returns({:build_options=>{}})
+        subject.stubs(:resource).returns({:package_settings=>{}})
         subject.stubs(:name).returns('foo-1.2.3')
       end
       it "should not call do_potupgrade" do
@@ -783,7 +783,7 @@ describe provider_class do
     context "an installed package" do
       it "should call do_potupgrade portorigin, reinstall_options, options" do
         subject.stubs(:properties).returns({:ensure => :present})
-        subject.stubs(:resource).returns({:build_options=>{}})
+        subject.stubs(:resource).returns({:package_settings=>{}})
         subject.instance_variable_set(:@portorigin,'bar/foo')
         subject.stubs(:name).returns('bar/foo')
         subject.stubs(:upgrade_options).returns(%w{-R -M BATCH=yes})
@@ -796,7 +796,7 @@ describe provider_class do
       before(:each) do
         subject.stubs(:properties).returns({:ensure => :present, :name=>'foo'})
         subject.stubs(:name).returns('foo-1.2.3')
-        subject.stubs(:resource).returns({:build_options=>{}})
+        subject.stubs(:resource).returns({:package_settings=>{}})
         subject.stubs(:upgrade_options).returns(%w{-R -M BATCH=yes})
         subject.stubs(:do_portupgrade)
         subject.stubs(:install)
