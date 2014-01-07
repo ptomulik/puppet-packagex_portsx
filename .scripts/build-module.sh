@@ -10,8 +10,8 @@ TARGET=`mktemp -d`
 
 function do_build_module {
   tag=$1
-  tgz="$TARGET/ptomulik-portsxutil-${tag}.tar.gz"
-  dir="ptomulik-portsxutil-$tag/"
+  tgz="$TARGET/ptomulik-packagex_portsx-${tag}.tar.gz"
+  dir="ptomulik-packagex_portsx-$tag/"
   git archive --prefix $dir --output $tgz $tag
   (cd $TARGET && tar -xzf $tgz && cd $TARGET/$dir && puppet module build)
 }
