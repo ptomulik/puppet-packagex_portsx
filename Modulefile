@@ -8,5 +8,5 @@ description 'Ports provider for packagex resource type'
 project_page 'https://gitbub.com/ptomulik/puppet-packagex_portsx'
 
 ## Add dependencies, if any:
-dependency 'ptomulik/packagex_resource', '>= 0.1.3'
+dependency 'ptomulik/packagex_resource', '>= 0.1.2'
 dependency 'ptomulik/portsxutil', '>= 0.1.3'
