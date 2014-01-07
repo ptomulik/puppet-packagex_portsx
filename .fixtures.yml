@@ -1,0 +1,7 @@
+fixtures:
+  repositories:
+    packagex_resource: "git://github.com/ptomulik/puppet-packagex_resource.git"
+    portsxutil: "git://github.com/ptomulik/puppet-portsxutil.git"
+    vash:  "git://github.com/ptomulik/puppet-vash.git"
+  symlinks:
+    packagex_portsx: "#{source_dir}"
