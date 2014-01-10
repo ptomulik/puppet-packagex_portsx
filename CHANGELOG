@@ -1,4 +1,5 @@
 2014-01-10 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * release 0.1.3
   * added portsxutil to $LOAD_PATH in provider
 2014-01-09 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
   * release 0.1.2
