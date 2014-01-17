@@ -25,11 +25,10 @@ removed at all without a notice. Do not use in production.
 
 ## Overview
 
-**NOTE**: I'm going to change the name `build_options` property to something
-more general. It'll be probably `package_settings`. The `build_options` will be
-present for some time (one or two releases) together with the new property to
-give you some time to adjust your puppet manifests. The `build_options` will be
-deprecated in next release.
+
+**NOTE**: The `build_options` property is being renamed to `package_settings`. 
+Currently it's a transition period so you may use one or the other. The
+`build_options` will be removed in next major release.
 
 This is a __portsx__ provider for
 [packagex](https://github.com/ptomulik/puppet-packagex) resource.
@@ -46,7 +45,9 @@ to it and fixing several existing issues. The new features include:
     or *pkg delete*
     ([pkgng](http://www.freebsd.org/doc/handbook/pkgng-intro.html)) when
     uninstalling packages,
-  * *build_options* - configuration options for package,
+  * *package_settings* - configuration options for package,
+  * *build_options* - an alias for *package_settings*, will be removed in next
+    major release,
   * works wit both the old
     [pkg](http://www.freebsd.org/doc/handbook/packages-using.html) and new
     [pkgng](http://www.freebsd.org/doc/handbook/pkgng-intro.html) package
@@ -59,12 +60,12 @@ to it and fixing several existing issues. The new features include:
   * added unit tests (original provider had no tests),
   * several issues resolved, see [Resolved issues](#resolved-issues) 
 
-The *build_options* is simply an `{OPTION => value}` hash, with boolean values.
+The *package_settings* is simply an `{OPTION => value}` hash, with boolean values.
 The *portsx* provider ensures that package is compiled with prescribed
-*build_options*. Normally you would set these options with *make config*
-command using ncurses-based frontend. Here, you can define *build_options* in
+*package_settings*. Normally you would set these options with *make config*
+command using ncurses-based frontend. Here, you can define *package_settings* in
 your puppet manifest. If a package is already installed and you change its
-*build_options* in manifest file, the package gets rebuilt with new options and
+*package_settings* in manifest file, the package gets rebuilt with new options and
 reinstalled.
 
 Instead of *portnames*, *portorigins* are used to identify *portsx* instances
@@ -136,13 +137,13 @@ You may need to enable __pluginsync__ in your `puppet.conf`.
 Its usage is essentially same as for the original *ports* provider. Here I
 just put some examples specific to new features.
 
-#### Example 1 - using build options
+#### Example 1 - using package settings
 
-Using `build_options`:
+Using `package_settings`:
 
 ```puppet
 packagex { 'www/apache22': 
-  build_options => {'SUEXEC' => true}
+  package_settings => {'SUEXEC' => true}
 }
 ```
 
@@ -530,20 +531,20 @@ packagex { 'devel/autoconf':
 See the difference in the package name?
 
 
-### The `puppet resource packagex` displays *build_options*
+### The `puppet resource packagex` displays *package_settings*
 
 This too may break some scripts that parse output of `puppet resource packagex
-...`. The example output for package having *build_options* is:
+...`. The example output for package having *package_settings* is:
 
 ```console
 ~ # puppet resource packagex 'textproc/libxml2'
 packagex { 'textproc/libxml2':
   ensure        => '2.8.0_3',
-    build_options => '{:MEM_DEBUG=>false, :SCHEMA=>true, :THREADS=>true, :THREAD_ALLOC=>false, :XMLLINT_HIST=>false}',
+    package_settings => '{:MEM_DEBUG=>false, :SCHEMA=>true, :THREADS=>true, :THREAD_ALLOC=>false, :XMLLINT_HIST=>false}',
     }
 ```
 
-Note, that the *build_options* would never appear in output of the original
+Note, that the *package_settings* would never appear in output of the original
 (old) *ports* provider.
 
 ## Limitations
