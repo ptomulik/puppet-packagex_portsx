@@ -3,7 +3,7 @@ dir = File.expand_path(File.join(File.dirname(__FILE__), '../../..'))
 $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir)
 dir = File.expand_path(File.join(File.dirname(__FILE__), '../../../../../vash/lib'))
 $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir)
-dir = File.expand_path(File.join(File.dirname(__FILE__), '../../../../../packagex_portsxutil/lib'))
+dir = File.expand_path(File.join(File.dirname(__FILE__), '../../../../../portsxutil/lib'))
 $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir)
 # PACKAGEX_EXTRA_END
 Puppet::Type.type(:packagex).provide :portsx, :parent => :freebsd, :source => :freebsd do

@@ -1,4 +1,5 @@
 2014-01-17 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * fixed problem with loading modules from 'portsxutil'
   * release 0.1.4
   * updated README.md to notice about package_settings stuff
 2014-01-10 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
