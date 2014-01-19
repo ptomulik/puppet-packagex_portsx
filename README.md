@@ -11,7 +11,7 @@
 3. [Setup](#setup)
     * [What portsx affects](#what-portsx-affects)
     * [Setup requirements](#setup-requirements)
-    * [Beginning with packagex](#beginning-with-packagex)
+    * [Beginning with packagex\_portsx](#beginning-with-packagex_portsx)
 4. [Usage](#usage)
 5. [Resolved issues](#resolved-issues)
 6. [Known incompatibilities](#known-incompatibilities)
@@ -132,7 +132,7 @@ Warning: Puppet::Type::Packagex::ProviderPortsx: Found 3 ports named 'mysql-clie
 
 You may need to enable __pluginsync__ in your `puppet.conf`.
 
-### Beginning with portsx
+### Beginning with packagex\_portsx
 
 Its usage is essentially same as for the original *ports* provider. Here I
 just put some examples specific to new features.
@@ -566,5 +566,5 @@ Note, that the *package_settings* would never appear in output of the original
 
 ## Development
 The project is held at github:
-* [https://github.com/ptomulik/puppet-packagex](https://github.com/ptomulik/puppet-packagex)
+* [https://github.com/ptomulik/puppet-packagex](https://github.com/ptomulik/puppet-packagex_portsx)
 Issue reports, patches, pull requests are welcome!

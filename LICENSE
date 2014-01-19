@@ -1,7 +1,6 @@
-Packagex - puppet package resource with extensions.
+Packagex_portsx - ports provider for puppet packagex resource.
 
 Copyright (C) 2013-2014 Paweł Tomulik <ptomulik@meil.pw.edu.pl>.
-Copyright (C) 2005-2013 Puppet Labs Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

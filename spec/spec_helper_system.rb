@@ -21,8 +21,8 @@ RSpec.configure do |c|
     puppet_master_install
 
     # Install modules and dependencies
-    puppet_module_install(:source => proj_root, :module_name => 'packagex')
-    shell('puppte module install ptomulik-portsxutil')
-    shell('puppte module install ptomulik-packagex_resource')
+    puppet_module_install(:source => proj_root, :module_name => 'packagex_portsx')
+    shell('puppet module install ptomulik-portsxutil')
+    shell('puppet module install ptomulik-packagex_resource')
   end
 end

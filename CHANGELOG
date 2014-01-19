@@ -1,4 +1,8 @@
+2014-01-19 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * fixed buggy command line string for pkgng uninstall action
 2014-01-18 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
+  * fixed LICENSE
+  * corrections to README.md
   * release 0.1.5
   * fixed problem with loading modules from 'portsxutil'
 2014-01-17 Pawel Tomulik <ptomulik@meil.pw.edu.pl>
