@@ -1,5 +1,5 @@
 name    'ptomulik-packagex_portsx'
-version '0.1.5'
+version '0.1.6'
 source 'git://github.com/ptomulik/puppet-packagex_portsx.git'
 author 'ptomulik'
 license 'Apache License, Version 2.0'
